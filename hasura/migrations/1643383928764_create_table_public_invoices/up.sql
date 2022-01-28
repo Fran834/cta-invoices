@@ -1,0 +1,1 @@
+CREATE TABLE "public"."invoices" ("id" serial NOT NULL, "number" text NOT NULL, "date" date NOT NULL, "client" integer NOT NULL, "client_name" text NOT NULL, "client_vat" text NOT NULL, "base" money NOT NULL, "vat" money NOT NULL, "total" money NOT NULL, PRIMARY KEY ("id") );COMMENT ON TABLE "public"."invoices" IS E'invoices';

@@ -1,0 +1,68 @@
+- table:
+    schema: public
+    name: clients
+- table:
+    schema: public
+    name: invoices
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - date
+      - client_id
+      - id
+      - base
+      - total
+      - vat
+      - client_name
+      - client_vat
+      - number
+      backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - date
+      - client_id
+      - id
+      - base
+      - total
+      - vat
+      - client_name
+      - client_vat
+      - number
+      filter: {}
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - date
+      - client_id
+      - id
+      - base
+      - total
+      - vat
+      - client_name
+      - client_vat
+      - number
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: user
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: users
+  insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      columns: []
+      backend_only: false
+  select_permissions:
+  - role: anonymous
+    permission:
+      columns: []
+      filter: {}
