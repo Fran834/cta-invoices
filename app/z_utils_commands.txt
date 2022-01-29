@@ -1,0 +1,4 @@
+
+When you need kill app port:
+
+npx kill-port 3000

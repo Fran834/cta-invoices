@@ -5,6 +5,20 @@
     schema: public
     name: invoices
   insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      columns:
+      - date
+      - client_id
+      - id
+      - base
+      - total
+      - vat
+      - client_name
+      - client_vat
+      - number
+      backend_only: false
   - role: user
     permission:
       check: {}
@@ -20,6 +34,19 @@
       - number
       backend_only: false
   select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+      - date
+      - client_id
+      - id
+      - base
+      - total
+      - vat
+      - client_name
+      - client_vat
+      - number
+      filter: {}
   - role: user
     permission:
       columns:

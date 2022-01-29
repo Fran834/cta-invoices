@@ -1,0 +1,13 @@
+
+/home
+    Home page 
+
+/invoices   
+    List: List of invoices
+    New: Add a invoice
+    Modify: Modify a invoice
+    Delete: Delete a invoice
+
+/component_ui
+    Grid: Grid to share with anyone component
+    

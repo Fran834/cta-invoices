@@ -1,0 +1,18 @@
+https://hasura.io/docs/latest/graphql/core/hasura-cli/index.html
+
+En la carpeta de hasura
+
+hasura console
+    Abre una nueva consola de hasura
+
+hasura seed create datos --from-table users --from-table invoices --from-table clients
+    Crea una copia de esas tablas para que puedan ser importadas
+
+hasura migrate apply
+    Aplica todas las migraciones existentes
+
+hasura metadata apply
+    Aplica todos los metadatos
+
+hasura seeds apply
+    Aplica los datos
