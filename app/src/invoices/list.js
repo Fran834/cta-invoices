@@ -1,6 +1,22 @@
 import { gql, useQuery } from '@apollo/client';
 import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import {makeStyles} from '@mui/styles';
+import { Button, Paper } from '@mui/material';
+import {Link} from 'react-router-dom'
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(3),
+    margin: 0
+  },
+  div: {
+    paddingTop: theme.spacing(1)
+  },
+  link: {
+    textDecoration: 'none !important'
+  }
+}))
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -39,6 +55,7 @@ const QUERY_INVOICES = gql`
       }
   `
 export default function InvoicesList() {
+  const classes = useStyles();
 
   const {loading, error, data} = useQuery(QUERY_INVOICES, {
     pollInterval: 0,
@@ -52,15 +69,22 @@ export default function InvoicesList() {
   console.log(data);
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
-     <DataGrid
-          rows={data.invoices}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          checkboxSelection
-        />     
-    </div>)
+    <Paper className={classes.root} elevation={0}>
+      <div style={{ height: 400, width: '100%' }}>
+      <DataGrid
+            rows={data.invoices}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+            checkboxSelection
+          />     
+      </div>
+      <div className={classes.div}>
+        <Link className={classes.link} to="/invoices/new">
+          <Button variant="outlined">Add invoice</Button>
+        </Link>
+      </div>
+    </Paper>)
   ;
 
     // return (

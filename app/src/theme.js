@@ -1,26 +1,36 @@
 import { createTheme } from '@mui/material/styles'
-import { pink } from '@mui/material/colors'
-
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
+
+// const theme = createTheme({
+//   type: 'dark',
+//   primary: {
+//     main: '#3f51b5',
+//   },
+//   secondary: {
+//     main: '#f50057',
+//   },
+// });
+
 const theme = createTheme({
   palette: {
     primary: {
-      light: '#757ce8',
-      main: '#3f50b5',
-      dark: '#002884',
+      light: '#8e8e8e',
+      main: '#616161',
+      dark: '#373737',
       contrastText: '#fff',
     },
     secondary: {
-      light: '#ff7961',
-      main: '#f44336',
-      dark: '#ba000d',
+      light: '#63ccff',
+      main: '#039be5',
+      dark: '#006db3',
       contrastText: '#000',
     },
-  },
+  }
 });
 
-  export default theme
+
+export default theme

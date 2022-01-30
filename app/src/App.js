@@ -19,6 +19,7 @@ import {BrowserRouter} from 'react-router-dom';
 import { ThemeProvider } from '@mui/styles';
 import theme from './theme.js';
 import { hot } from 'react-hot-loader';
+import { GlobalStyles } from '@mui/styled-engine';
 
 
 const App = () => {
@@ -31,6 +32,7 @@ const App = () => {
   return (
   <BrowserRouter>
       <ThemeProvider theme={theme}>
+        <GlobalStyles/>
         <MainRouter/>
       </ThemeProvider>
   </BrowserRouter>

@@ -1,4 +1,3 @@
-import React, {useState, useEffect} from 'react'
 import { makeStyles } from '@mui/styles'
 import Card from '@mui/material/Card'
 import CardMedia from '@mui/material/CardMedia'
@@ -7,10 +6,6 @@ import Typography from '@mui/material/Typography'
 import invoiceImg from './../assets/images/invoice.jpg'
 import Grid from '@mui/material/Grid'
 //import auth from './../auth/auth-helper'
-
-const auth = {
-    isAuthenticated: () => false
-};
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-export default function Home({}){
+export default function Home(){
   const classes = useStyles();
 
     return (

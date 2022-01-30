@@ -1,7 +1,8 @@
 import React from 'react'
-import {Route, Routes, Navigate} from 'react-router-dom'
+import {Route, Routes} from 'react-router-dom'
 import Home from './core/Home'
 import Invoices from './invoices/invoices'
+import InvoicesNew from './invoices/new'
 import Menu from './core/Menu'
 
 const MainRouter = () => {
@@ -10,6 +11,7 @@ const MainRouter = () => {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/invoices" element={<Invoices />}/>        
+        <Route path="/invoices/new" element={<InvoicesNew />}/>    
       </Routes>
     </div>)
 }

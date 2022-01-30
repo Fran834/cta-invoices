@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
+import {makeStyles} from '@mui/styles';
+import { Button, FormControl, Paper, FormLabel, InputLabel, FormHelperText, Input, Grid, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-// const QUERY_USERS = gql`
-//   query getUsers {
-//     users {
-//       id
-//       name
-//     }
-//   }
-// `
+const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(3),
+    margin: 0
+  },
+  link: {
+    textDecoration: 'none !important'
+  },
+  div: {
+    padding: theme.spacing(3)
+  },
+}))
 
 const MUTATION_ADD_INVOICE = gql`
     mutation addInvoice (
@@ -37,15 +44,17 @@ const MUTATION_ADD_INVOICE = gql`
 `
 
 
-export default function InvoicesInsert() {
+function InvoicesInsert() {
 
+  const navigate = useNavigate();
+  const classes = useStyles();
   //const resUsers = useQuery(QUERY_USERS)
 
   const [addInvoice, { data, loading, error }] = useMutation(MUTATION_ADD_INVOICE)
 
   const initialState = {
     number: '',
-    date: new Date().getDate,
+    date: new Date(),
     client_id: 0,
     client_name: '',
     client_vat: '',
@@ -67,55 +76,110 @@ export default function InvoicesInsert() {
       variables: formState,
     });
 
-    setFormState(initialState)
+    setFormState(initialState);
+    navigate('/invoices');
 
   }
 
   return (
-    <div>
+    <Paper className={classes.root} elevation={4}>
       <form onSubmit={handleSubmit}>
-        <label>
-          <span>Number</span>
-          <input value={formState.number} onChange={(e) => setFormState({ ...formState, number: e.target.value })} type="text" step={1} />
-          {/* <select required value={formState.userId} onChange={(e) => setFormState({ ...formState, userId: parseInt(e.target.value, 10) })}>
-            <option value="">Select</option>
-            {resUsers.data && <>
-              {resUsers.data.users.map(user => <option value={user.id} key={user.id}>{user.name}</option>)}
-            </>}
-          </select> */}
-        </label>
-        <label>
-          <span>Date</span>
-          <input value={formState.date} onChange={(e) => setFormState({ ...formState, date: e.target.value })} type="date" step={1} />
-        </label>
-        <label>
-          <span>Client ID</span>
-          <input value={formState.client_id} onChange={(e) => setFormState({ ...formState, client_id: parseInt(e.target.value, 0) })} type="number" step={1} />
-        </label>
-        <label>
-          <span>Client Name</span>
-          <input value={formState.client_name} onChange={(e) => setFormState({ ...formState, client_name: e.target.value })} type="text" step={1} />
-        </label>
-        <label>
-          <span>Client VAT</span>
-          <input value={formState.client_vat} onChange={(e) => setFormState({ ...formState, client_vat: e.target.value })} type="text" step={1} />
-        </label>
-        <label>
-          <span>Base</span>
-          <input value={formState.base} onChange={(e) => setFormState({ ...formState, base: parseInt(e.target.value) })} type="money" step={1} />
-        </label>
-        <label>
-          <span>Vat</span>
-          <input value={formState.vat} onChange={(e) => setFormState({ ...formState, vat: parseInt(e.target.value) })} type="money" step={1} />
-        </label>
-        <label>
-          <span>Total</span>
-          <input value={formState.total} onChange={(e) => setFormState({ ...formState, total: parseInt(e.target.value) })} type="money" step={1} />
-        </label>        
-        <div>
-          <button type="submit">Save</button>
-        </div>
-      </form>
-    </div>
+        <Grid container spacing={1} direction="column" justifyContent="flex-start" alignItems="flex-start">
+          <Grid item>
+            <FormControl>
+              <TextField id="number" 
+                label="Number"
+                value={formState.number} 
+                onChange={(e) => setFormState({ ...formState, number: e.target.value })} 
+                type="text"  
+                variant="standard"/>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl>
+              <TextField id="date" 
+                label="Date"
+                value={formState.date} 
+                onChange={(e) => setFormState({ ...formState, date: e.target.value })} 
+                type="date"  
+                variant="standard" />
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl>
+              <TextField id="client_id" 
+                label="Client ID"
+                value={formState.client_id} 
+                onChange={(e) => setFormState({ ...formState, client_id: e.target.value })} 
+                type="number"  
+                variant="standard"/>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl>
+              <TextField id="client_name" 
+                label="Client Name"
+                value={formState.client_name} 
+                onChange={(e) => setFormState({ ...formState, client_name: e.target.value })} 
+                type="text"  
+                variant="standard"/>
+            </FormControl>
+          </Grid>
+          
+          <Grid item xs={12}>
+            <FormControl>
+              <TextField id="client_vat" 
+                label="Client VAT"
+                value={formState.client_vat} 
+                onChange={(e) => setFormState({ ...formState, client_vat: e.target.value })} 
+                type="text"  
+                variant="standard"/>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl>
+              <TextField id="base" 
+                label="Base"
+                value={formState.base} 
+                onChange={(e) => setFormState({ ...formState, base: e.target.value })} 
+                type="number"  
+                variant="standard"/>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl>
+              <TextField id="vat" 
+                label="Taxes"
+                value={formState.vat} 
+                onChange={(e) => setFormState({ ...formState, vat: e.target.value })} 
+                type="number"  
+                variant="standard"/>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12}>
+            <FormControl>
+              <TextField id="total" 
+                label="Total"
+                value={formState.total} 
+                onChange={(e) => setFormState({ ...formState, total: e.target.value })} 
+                type="number" 
+                variant="standard"/>
+            </FormControl>
+          </Grid> 
+                            
+          <div className={classes.div}>
+            <Button variant="outlined" type="submit">Save</Button>
+          </div>
+        </Grid>   
+      </form>         
+    </Paper>
   )
 }
+
+export default InvoicesInsert;
