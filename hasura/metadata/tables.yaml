@@ -61,6 +61,19 @@
       - number
       filter: {}
   update_permissions:
+  - role: anonymous
+    permission:
+      columns:
+      - base
+      - client_id
+      - client_name
+      - client_vat
+      - date
+      - number
+      - total
+      - vat
+      filter: {}
+      check: null
   - role: user
     permission:
       columns:
