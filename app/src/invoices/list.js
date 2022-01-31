@@ -1,13 +1,17 @@
-import { gql, useQuery } from '@apollo/client';
-import React, { useRef } from 'react';
+import { useQuery } from '@apollo/client';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import {makeStyles} from '@mui/styles';
-import { Button, Paper } from '@mui/material';
+import { Button, Paper, Snackbar, Alert, AlertTitle, typographyClasses } from '@mui/material';
 import {Link} from 'react-router-dom'
+import { QUERY_INVOICES } from './querys-mutations';
+import DeleteDialog  from './delete';
+import Typography from '@mui/material/Typography';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(1),
     margin: 0
   },
   div: {
@@ -15,7 +19,10 @@ const useStyles = makeStyles(theme => ({
   },
   link: {
     textDecoration: 'none !important',
-    paddingRight: theme.spacing(3),
+    paddingRight: theme.spacing(1),
+  },
+  button: {
+    marginRight: theme.spacing(1) + ' !important',
   }
 }))
 
@@ -43,73 +50,122 @@ const columns = [
   },
 ];
 
-const QUERY_INVOICES = gql`
-      query MyQuery {
-          invoices (order_by: {id: asc}) {
-              id
-              number
-              date
-              client_id
-              client_name
-              total
-          }
-      }
-  `
 export default function InvoicesList() {
+
   const classes = useStyles();
-   const [selectionstate, setSelection] = React.useState([0]);
-  const selection = useRef({});
+  const navigate = useNavigate();
 
-  function currentlySelected_ante(selections) {
-    selection.current = "/invoices/invoice/" + selections.toString();
-    console.log(selection.current);
-  }
+  const [open, setOpen] = React.useState(false);
+  const [linkToSelectedRow, setLinkToSelectedRow] = React.useState('/invoices/invoice/0');
+  const [showMessageError, setShowMessageError] = React.useState(false);
 
+  //const selection = useRef({});
+  // const currentlySelectedRow_antes = (selections) => {
+  //   selection.current = "/invoices/invoice/" + selections.toString();
+  //   console.log(selection.current);
+  // }
+
+  //Load data
+  const [dataInvoices, setDataInvoices] = React.useState([]);
   const {loading, error, data} = useQuery(QUERY_INVOICES, {
     pollInterval: 0,
     fetchPolicy: "network-only",   // Used for first execution
-    nextFetchPolicy: "no-cache" // Used for subsequent executions
+    nextFetchPolicy: "no-cache", // Used for subsequent executions
+    onCompleted() {
+      setDataInvoices(data.invoices);
+    }
   })
   
   if (loading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
 
-  //console.log(data);
+  const removeRow = () => {
+    // console.log(data.invoices);
+    // console.log(data.invoices.filter((r) => r.id !== parseInt(linkToSelectedRow.toString().replace('/invoices/invoice/', ''))));
+    setDataInvoices(dataInvoices.filter((r) => r.id !== parseInt(linkToSelectedRow.toString().replace('/invoices/invoice/', ''))));
+  }
+  //
 
-  function currentlySelected(selections) {
-     if (selectionstate !== selections) { // I didn't write it in but you'll need to do object comparison here
-       setSelection(`/invoices/invoice/${selections.toString()}`);
-       console.log(selections);
+  //Update selectedRow
+  const currentlySelectedRow = (selections) => {
+     if (linkToSelectedRow !== selections) { // I didn't write it in but you'll need to do object comparison here
+       setLinkToSelectedRow(`/invoices/invoice/${selections.toString()}`);
+       setShowMessageError(false);
      }
   }
 
+  //SomeRowSelected
+  const someRowSelected = () => {
+    if (linkToSelectedRow === '/invoices/invoice/0') return false;
+    return true;
+  }
+
+  //Modify invoice if some row are selected
+  const ModifyInvoice = (event) => {
+    //console.log(linkToSelectedRow);
+    if (!someRowSelected()) setShowMessageError(true); 
+    if (someRowSelected()) navigate(linkToSelectedRow);
+  }
+
+  //Prompt message to user to confirm delete 
+  const handleClickOpen = () => {
+    if (!someRowSelected()) setShowMessageError(true); 
+    if (someRowSelected()) setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  // const [deleteInvoice] = useMutation(MUTATION_DELETE_INVOICE, {
+  //   variables: {
+  //     id: parseInt(linkToSelectedRow.toString().replace('/invoices/invoice/'), '')
+  //   },
+  //   onCompleted(data) {
+  //     console.log('Borrado');
+  //   }
+  // });
+
+  // const HandleConfirm = () => {   
+  //   const invoice = {
+  //     id: parseInt(linkToSelectedRow.toString().replace('/invoices/invoice/'), '')
+  //   }
+  //   deleteInvoice({
+  //     variables: invoice
+  //   });
+  // };
+
+
+  //Return page
   return (
     <Paper className={classes.root} elevation={0}>
-      <div style={{ height: 400, width: '100%' }}>
+      <Typography variant="h6" noWrap component="div">
+        My Invoices
+      </Typography>
+      <div style={{ height: 570, width: '100%' }}>
+      {showMessageError && <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={showMessageError} autoHideDuration={6000} onClose={() => setShowMessageError(false)}>
+                      <Alert severity="error" onClose={() => setShowMessageError(false)}>
+                        <AlertTitle>Error</AlertTitle>
+                        You must to <strong>select a invoice</strong>
+                      </Alert>
+                    </Snackbar>}
       <DataGrid
-            rows={data.invoices}
+            rows={dataInvoices}
             columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            onSelectionModelChange={currentlySelected}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+            onSelectionModelChange={currentlySelectedRow}
+            rowHeight={42}
           />     
       </div>
       <div className={classes.div}>
         <Link className={classes.link} to="/invoices/invoice">
           <Button variant="outlined">Add invoice</Button>
         </Link>
-        <Link className={classes.link} to={`${selectionstate}`} >
-          <Button variant="outlined">Modify invoice</Button>
-        </Link>
+        <Button className={classes.button} variant="outlined" onClick={ ModifyInvoice }>Modify invoice</Button>
+        <Button variant="outlined" onClick={ handleClickOpen }>Delete invoice</Button>
       </div>
-    </Paper>)
-  ;
-
-    // return (
-    //     <ul>
-    //         {resInvoices.data && resInvoices.data.invoices.map(invoice => (
-    //             <li key={invoice.number}>{invoice.date} | {invoice.client_id} | {invoice.client_name}| {invoice.total}</li>
-    //         ))}
-    //     </ul>
-    // );
+      <DeleteDialog open={open} setOpen={setOpen} removeRow={removeRow} id={parseInt(linkToSelectedRow.toString().replace('/invoices/invoice/', ''))} />  
+    </Paper>
+  );
 }

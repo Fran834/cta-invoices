@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
 import {makeStyles} from '@mui/styles';
 import { useParams } from 'react-router-dom';
-
-import { Button, FormControl, Paper, Grid, TextField, Box } from '@mui/material';
+import { Button, Paper, Grid, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { CustomTextField } from './../components/CustomTextField';
-
-import { ReadInvoice } from './readInvoice';
+import { ReadInvoice } from './read';
+import { MUTATION_ADD_INVOICE, MUTATION_UPDATE_INVOICE } from './querys-mutations';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,59 +21,6 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const MUTATION_ADD_INVOICE = gql`
-    mutation addInvoice (
-      $number: String!
-      $date: date!
-      $client_id: Int!
-      $client_name: String
-      $client_vat: String
-      $base: numeric!
-      $vat: numeric!
-      $total: numeric!
-    ) {
-      insert_invoices(objects: {
-        number: $number,
-        date: $date,
-        client_id: $client_id
-        client_name: $client_name
-        client_vat: $client_vat
-        base: $base
-        vat: $vat
-        total: $total
-      }) {
-        affected_rows
-      }
-    }
-`
-
-const MUTATION_UPDATE_INVOICE = gql `
-  mutation MyMutation (
-    $id:Int!, 
-    $number: String!
-    $date: date!
-    $client_id: Int!
-    $client_name: String
-    $client_vat: String
-    $base: numeric!
-    $vat: numeric!
-    $total: numeric!
-  ) {
-    update_invoices_by_pk(pk_columns: {id: $id}, 
-      _set: {
-        number: $number, 
-        date: $date, 
-        client_id: $client_id, 
-        client_name: $client_name, 
-        client_vat: $client_vat, 
-        base: $base,
-        vat: $vat,
-        total: $total
-      }
-  ) {
-      id
-    }
-}`
 
 
 function InvoiceForm() {

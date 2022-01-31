@@ -89,6 +89,9 @@
       filter: {}
       check: null
   delete_permissions:
+  - role: anonymous
+    permission:
+      filter: {}
   - role: user
     permission:
       filter: {}

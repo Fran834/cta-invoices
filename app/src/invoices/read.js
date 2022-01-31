@@ -1,20 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-
-const SELECT_INVOICE = gql`
-query MyQuery($id: Int!) {
-  invoices_by_pk(id: $id) {
-    id
-    base
-    client_id
-    client_name
-    client_vat
-    date
-    number
-    total
-    vat
-  }
-}
-`
+import { SELECT_INVOICE } from './querys-mutations';
 
 export function ReadInvoice(id) {
 
@@ -26,7 +11,7 @@ export function ReadInvoice(id) {
   })
 
   if (data) {
-    console.log(data.invoices_by_pk);
+    //console.log(data.invoices_by_pk);
     return data.invoices_by_pk;
   }
   
