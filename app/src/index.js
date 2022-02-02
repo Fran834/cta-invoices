@@ -1,7 +1,16 @@
+import { runHookApp } from '@forrestjs/hooks';
+
+// Services
+import reactRoot from '@forrestjs/react-root';
+//import reactMUI from '@forrestjs/react-mui';
+import reactRouter from '@forrestjs/react-router';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+
+
 
 import './index.css';
 
